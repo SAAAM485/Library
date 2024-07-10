@@ -7,14 +7,18 @@ function Book(title, author, pages, read) {
     this.read = read;
 }
 
-function addBookToLibrary() {
+function addBookToLibrary(title, author, pages, read) {
     //add books to array
+    let book = new Book(title, author, pages, read);
+    myLibrary.push(book);
 }
 
 function loopBooksOfLibrary() {
     //loop books in array
-    let cards = document.querySelectorAll(".card")
-    cards.remove();
+    let cards = document.querySelectorAll(".card");
+    cards.forEach(card => {
+        card.remove();
+    });
     myLibrary.forEach(book => {
         createCard();
     });
@@ -51,9 +55,12 @@ function createCard(title, author, pages, read) {
     let label = document.createElement("label");
     label.htmlFor = "read";
     label.appendChild(document.createTextNode("I have read this book."));
-
-    card.appendChild(checkbox);
+    card.appendChild(readCheckbox);
     card.appendChild(label);
+
+    let remove = document.createElement("button");
+    remove.innerHTML = "Remove";
+    card.appendChild(remove);
 
     const container = document.querySelector(".container");
     container.appendChild(card);
@@ -70,4 +77,23 @@ addBook.addEventListener("click", () => {
 
 cancelBtn.addEventListener("click", () => {
     dialog.close();
+});
+
+addBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    let title = document.querySelector("#title").value;
+    let author = document.querySelector("#author").value;
+    let pages = document.querySelector("#pages").value;
+    let read = document.querySelector("#read").checked;
+
+    if (read !== undefined) {
+        read = true;
+    } else {
+        read = false;
+    }
+
+    dialog.close();
+    addBookToLibrary(title, author, pages, read);
+    loopBooksOfLibrary();
 });
