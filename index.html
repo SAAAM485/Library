@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagel Library</title>
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header">Bagel Library</div>
+        <button id="add_book">Add a Book</button>
+        <dialog>
+            <h1>Add your book to the Bagel Library!</h1>
+            <form method="dialog">
+                <label for="title">Book Title</label>
+                <input type="text" id="title" name="title" required autofocus>
+                <label for="author">Book Author</label>
+                <input type="text" id="author" name="author" required>
+                <label for="pages">Book Pages</label>
+                <input type="text" id="pages" name="pages">
+                <button type="submit" id="add_btn">Add</button>
+                <button type="button" id="cancel_btn">Cancel</button>
+            </form>
+        </dialog>
+    </header>
+    <div class="container"></div>
+</body>
+</html>
