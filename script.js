@@ -19,28 +19,27 @@ function loopBooksOfLibrary() {
     cards.forEach(card => {
         card.remove();
     });
-    myLibrary.forEach(book => {
-        createCard();
+    myLibrary.forEach((book, index) => {
+        createCard(book, index);
     });
 }
 
-function createCard(title, author, pages, read) {
+function createCard(book, index) {
     //create cards on display
     let card = document.createElement("div");
     card.setAttribute("class", "card");
+    card.object = book;
     
     let bookTitle = document.createElement("div");
-    
-    let titleContent = document.createTextNode(title);
-    bookTitle.appendChild(titleContent);
+    bookTitle.innerHTML = "Title - " + book.title;
     card.appendChild(bookTitle);
     
     let bookAuthor = document.createElement("div");
-    bookAuthor.innerHTML = author;
+    bookAuthor.innerHTML = "Auther - " + book.author;
     card.appendChild(bookAuthor);
     
     let bookPages = document.createElement("div");
-    bookPages.innerHTML = pages;
+    bookPages.innerHTML = "Pages - " + book.pages;
     card.appendChild(bookPages);
     
     let readCheckbox = document.createElement("input");
@@ -48,22 +47,29 @@ function createCard(title, author, pages, read) {
     readCheckbox.name = "read";
     readCheckbox.value = "value";
     readCheckbox.id = "read";
-    if (read === true) {
+    if (book.read === true) {
         readCheckbox.checked = true;
     }
 
     let label = document.createElement("label");
     label.htmlFor = "read";
     label.appendChild(document.createTextNode("I have read this book."));
-    card.appendChild(readCheckbox);
-    card.appendChild(label);
+    let checkboxContainer = document.createElement("div");
+    checkboxContainer.appendChild(readCheckbox);
+    checkboxContainer.appendChild(label);
+    card.appendChild(checkboxContainer);
 
     let remove = document.createElement("button");
     remove.innerHTML = "Remove";
+    remove.setAttribute("id", index);
     card.appendChild(remove);
 
     const container = document.querySelector(".container");
     container.appendChild(card);
+
+    let removeBtn = remove
+    removeCardListener(removeBtn, index);
+    readStatus(readCheckbox, index);
 }
 
 const addBook = document.querySelector("#add_book");
@@ -87,13 +93,52 @@ addBtn.addEventListener("click", (event) => {
     let pages = document.querySelector("#pages").value;
     let read = document.querySelector("#read").checked;
 
-    if (read !== undefined) {
-        read = true;
-    } else {
-        read = false;
+    if (title == null || title == "" 
+        || author == null || author == "" 
+        || pages == null || pages == "") {
+        alert("Fields must be filled out");
+        return false;
     }
 
     dialog.close();
     addBookToLibrary(title, author, pages, read);
     loopBooksOfLibrary();
 });
+
+const removeBtns = document.querySelectorAll(".remove_btn");
+removeBtns.forEach(removeBtn => {
+    console.log("click");
+    removeBtn.addEventListener("click", () => {
+        let cardIndex = removeBtn.id;
+        myLibrary.splice(cardIndex, 1)
+        let cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+            card.remove();
+        });
+        loopBooksOfLibrary();
+    });
+});
+
+function removeCardListener(removeBtn, index) {
+    removeBtn.addEventListener("click", () => {
+
+        myLibrary.splice(index, 1)
+        let cards = document.querySelectorAll(".card");
+        cards.forEach(card => {
+            card.remove();
+        });
+        loopBooksOfLibrary();
+    });
+}
+
+function readStatus(checkbox, index) {
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            myLibrary[index].read = true
+        } else {
+            myLibrary[index].read = false
+        }
+    });
+    console.log(myLibrary[index]);
+}
+
